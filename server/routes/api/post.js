@@ -2,6 +2,7 @@ import express from "express";
 
 // Model
 import Post from "../../models/post";
+import auth from "../../middleware/auth";
 
 const router = express.Router();
 
@@ -12,7 +13,7 @@ router.get("/", async (req, res) => {
   res.json(postFindResult);
 });
 
-router.post("/", async (req, res, next) => {
+router.post("/", auth, async (req, res, next) => {
   try {
     console.log(req, "req");
     const { title, contents, fileUrl, creator } = req.body;
