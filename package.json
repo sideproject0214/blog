@@ -10,11 +10,13 @@
   "keywords": [],
   "description": "",
   "dependencies": {
+    "bcryptjs": "2.4.3",
     "cors": "2.8.5",
     "dotenv": "8.2.0",
     "express": "4.17.1",
     "helmet": "3.22.0",
     "hpp": "0.2.3",
+    "jsonwebtoken": "8.5.1",
     "moment": "2.26.0",
     "mongoose": "5.9.18"
   },
