@@ -8,6 +8,7 @@ import cors from "cors";
 // Routes
 import postRoutes from "./routes/api/post";
 import userRoutes from "./routes/api/user";
+import authRoutes from "./routes/api/auth";
 
 import morgan from "morgan";
 
@@ -35,5 +36,6 @@ mongoose
 app.get("/");
 app.use("/api/post", postRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/auth", authRoutes);
 
 export default app;
