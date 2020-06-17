@@ -10,10 +10,10 @@ import {
   Button,
 } from "reactstrap";
 import { Link } from "react-router-dom";
-import LoginModal from "../components/auth/LoginModal";
 import { useSelector, useDispatch } from "react-redux";
-import { LOGOUT_REQUEST } from "../redux/types";
-import RegisterModal from "./auth/RegisterModal";
+import { LOGOUT_REQUEST, POSTS_WRITE_REQUEST } from "../redux/types";
+import LoginModal from "../components/auth/LoginModal";
+import RegisterModal from "../components/auth/RegisterModal";
 
 const AppNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -38,7 +38,11 @@ const AppNavbar = () => {
     setIsOpen(!isOpen);
   };
 
-  const addPostClick = () => {};
+  const addPostClick = () => {
+    dispatch({
+      type: POSTS_WRITE_REQUEST,
+    });
+  };
 
   const authLink = (
     <Fragment>
@@ -60,7 +64,7 @@ const AppNavbar = () => {
       <NavItem className="d-flex justify-content-center">
         <Form className="col mt-2">
           {user && user.name ? (
-            <Link>
+            <Link to="#">
               <Button outline color="light" className="px-3" block>
                 <strong>{user ? `Welcome ${user.name}` : ""}</strong>
               </Button>
@@ -74,7 +78,7 @@ const AppNavbar = () => {
       </NavItem>
       <NavItem>
         <Form className="col">
-          <Link onClick={onLogout} to="#">
+          <Link onClick={onLogout} to="#" className="">
             <Button outline color="light" className="mt-2" block>
               Logout
             </Button>
