@@ -1,5 +1,5 @@
 import axios from "axios";
-import { put, call, takeEvery, all } from "redux-saga/effects";
+import { put, call, takeEvery, all, fork } from "redux-saga/effects";
 import { push } from "connected-react-router";
 import {
   POSTS_LOADING_FAILURE,
@@ -35,5 +35,5 @@ function* watchLoadPosts() {
 }
 
 export default function* postSaga() {
-  yield all([fork(watchLoadPosts)]
+  yield all([fork(watchLoadPosts)]);
 }
