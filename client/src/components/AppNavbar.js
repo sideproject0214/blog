@@ -50,7 +50,7 @@ const AppNavbar = () => {
         {userRole === "MainJuin" ? (
           <Form className="col mt-2">
             <Link
-              to="posts"
+              to="/post"
               className="btn btn-success block text-white px-3"
               onClick={addPostClick}
             >
