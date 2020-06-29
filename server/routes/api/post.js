@@ -2,6 +2,9 @@ import express from "express";
 
 // Model
 import Post from "../../models/post";
+import User from "../../models/user";
+import Category from "../../models/category";
+
 import auth from "../../middleware/auth";
 
 const router = express.Router();
@@ -11,6 +14,7 @@ import multerS3 from "multer-s3";
 import path from "path";
 import AWS from "aws-sdk";
 import dotenv from "dotenv";
+import { isNullOrUndefined } from "util";
 dotenv.config();
 
 const s3 = new AWS.S3({
@@ -53,17 +57,57 @@ router.get("/", async (req, res) => {
   res.json(postFindResult);
 });
 
-router.post("/", auth, async (req, res, next) => {
+// @route    POST api/post
+// @desc     Create a Post
+// @access   Private
+
+router.post("/", auth, uploadS3.none(), async (req, res, next) => {
   try {
     console.log(req, "req");
-    const { title, contents, fileUrl, creator } = req.body;
+    const { title, contents, fileUrl, creator, category } = req.body;
     const newPost = await Post.create({
       title,
       contents,
       fileUrl,
       creator,
+      data: moment().format("YYYY-MM-DD hh:mm:ss"),
     });
-    res.json(newPost);
+
+    const findResult = await Category.findOne({
+      categoryName: category,
+    });
+
+    console.log(findResult, "Find Result!!!!");
+
+    if (isNullOrUndefined(findResult)) {
+      const newCategory = await Category.create({
+        categoryName: category,
+      });
+      await Post.findByIdAndUpdate(newPost._id, {
+        $push: { category: newCategory._id },
+      });
+      await Category.findByIdAndUpdate(newCategory._id, {
+        $push: { posts: newPost._id },
+      });
+      await User.findByIdAndUpdate(req.user.id, {
+        $push: {
+          posts: newPost._id,
+        },
+      });
+    } else {
+      await Category.findByIdAndUpdate(findResult._id, {
+        $push: { posts: newPost._id },
+      });
+      await Post.findByIdAndUpdate(newPost._id, {
+        category: findResult._id,
+      });
+      await User.findByIdAndUpdate(req.user.id, {
+        $push: {
+          posts: newPost._id,
+        },
+      });
+    }
+    return res.redirect(`/api/post/${newPost._id}`);
   } catch (e) {
     console.log(e);
   }
