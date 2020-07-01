@@ -49,7 +49,7 @@ const uploadPostAPI = (payload) => {
   if (token) {
     config.headers["x-auth-token"] = token;
   }
-  return axios.get("/api/post", payload, config);
+  return axios.post("/api/post", payload, config);
 };
 
 function* uploadPosts(action) {
