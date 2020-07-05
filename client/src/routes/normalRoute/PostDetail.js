@@ -1,14 +1,15 @@
 import React, { useEffect, Fragment } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {} from "react-helmet";
+import { Helmet } from "react-helmet";
 import {
   POST_DETAIL_LOADING_REQUEST,
   POST_DELETE_REQUEST,
   USER_LOADING_REQUEST,
 } from "../../redux/types";
-import { Button } from "reactstrap";
+import { Button, Row, Col } from "reactstrap";
 import { Link } from "react-router-dom";
 import CKEditor from "@ckeditor/ckeditor5-react";
+import { GrowingSpinner } from "../../components/spinner/Spinner";
 
 const PostDetail = (req) => {
   const dispatch = useDispatch();
@@ -26,7 +27,7 @@ const PostDetail = (req) => {
       type: USER_LOADING_REQUEST,
       payload: localStorage.getItem("token"),
     });
-  });
+  }, []);
 
   const onDeleteClick = () => {
     dispatch({
@@ -48,7 +49,7 @@ const PostDetail = (req) => {
         </Col>
         <Col className="col-md-3 mr-md-3">
           <Link
-            to={`/post/${req.match.parasm.id}/edit`}
+            to={`/post/${req.match.params.id}/edit`}
             className="btn btn-success btn-block"
           >
             Edit Post
@@ -75,7 +76,37 @@ const PostDetail = (req) => {
     </Fragment>
   );
 
-  return <h1>PostDetail</h1>;
+  const Body = (
+    <>
+      {userId === creatorId ? EditButton : HomeButton}
+      <Row className="border-bottom border-top border-primary p-3 mb-3 justify-content-between">
+        {(() => {
+          if (postDetail && postDetail.creator) {
+            return (
+              <Fragment>
+                <div className="font-weight-bold text-big">
+                  <span className="mr-3">
+                    <Button color="info">
+                      {postDetail.category.categoryName}
+                    </Button>
+                  </span>
+                  {postDetail.title}
+                </div>
+                <div className="align-self-end">{postDetail.creator.name}</div>
+              </Fragment>
+            );
+          }
+        })()}
+      </Row>
+    </>
+  );
+
+  return (
+    <div>
+      <Helmet title={`Post | ${title}`} />
+      {loading === true ? GrowingSpinner : Body}
+    </div>
+  );
 };
 
 export default PostDetail;

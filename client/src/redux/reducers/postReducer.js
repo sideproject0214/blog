@@ -5,6 +5,9 @@ import {
   POSTS_WRITE_REQUEST,
   POSTS_WRITE_SUCCESS,
   POSTS_WRITE_FAILURE,
+  POST_DETAIL_LOADING_FAILURE,
+  POST_DETAIL_LOADING_SUCCESS,
+  POST_DETAIL_LOADING_REQUEST,
 } from "../types";
 
 const initialState = {
@@ -52,6 +55,26 @@ export default function (state = initialState, action) {
         loading: false,
       };
     case POSTS_WRITE_FAILURE:
+      return {
+        ...state,
+        error: action.payload,
+        loading: false,
+      };
+    case POST_DETAIL_LOADING_REQUEST:
+      return {
+        ...state,
+        posts: [],
+        loading: true,
+      };
+    case POST_DETAIL_LOADING_SUCCESS:
+      return {
+        ...state,
+        postDetail: action.payload,
+        creatorId: action.payload.creator._id,
+        title: action.payload.title,
+        loading: false,
+      };
+    case POST_DETAIL_LOADING_FAILURE:
       return {
         ...state,
         error: action.payload,

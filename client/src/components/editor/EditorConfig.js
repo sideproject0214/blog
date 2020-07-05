@@ -47,12 +47,11 @@ import TextTransformation from "@ckeditor/ckeditor5-typing/src/texttransformatio
 import Indent from "@ckeditor/ckeditor5-indent/src/indent";
 
 import IndentBlock from "@ckeditor/ckeditor5-indent/src/indentblock";
+import "@ckeditor/ckeditor5-build-classic/build/translations/ko";
 
 /* import Base64UploadAdapter from "@ckeditor/ckeditor5-upload/src/adapters/base64uploadadapter"; */
 
 import SimpleUploadAdapter from "@ckeditor/ckeditor5-upload/src/adapters/simpleuploadadapter";
-
-import "@ckeditor/ckeditor5-build-classic/build/translations/ko";
 
 import dotenv from "dotenv";
 

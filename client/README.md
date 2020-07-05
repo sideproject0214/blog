@@ -1,1 +1,1 @@
-# [ ] Post Saga 녹화해야됨
+# [ ] Post Detail Bdoy 만들어야 함
