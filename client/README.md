@@ -1,1 +1,1 @@
-# [ ] Post Detail Bdoy 만들어야 함
+# [ ] Comment 만드는 작업을 해야 됨
