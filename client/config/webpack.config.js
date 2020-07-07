@@ -699,9 +699,9 @@ module.exports = function (webpackEnv) {
           formatter: isEnvProduction ? typescriptFormatter : undefined,
         }),
       // CKEditor5 Setting
-      new CKEditorWebpackPlugin({
+      /*  new CKEditorWebpackPlugin({
         language: "ko",
-      }),
+      }), */
     ].filter(Boolean),
     // Some libraries import Node modules but don't use them in the browser.
     // Tell webpack to provide empty mocks for them so importing them works.
