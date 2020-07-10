@@ -4,6 +4,7 @@ import {
   COMMENT_LOADING_FAILURE,
   COMMENT_UPLOADING_REQUEST,
   COMMENT_UPLOADING_SUCCESS,
+  COMMENT_UPLOADING_FAILURE,
 } from "../types";
 
 const initialState = {
@@ -43,7 +44,7 @@ const commentReducer = (state = initialState, action) => {
         isAuthenticated: true,
         loading: false,
       };
-    case COMMENT_LOADING_FAILURE:
+    case COMMENT_UPLOADING_FAILURE:
       return {
         ...state,
         loading: false,
