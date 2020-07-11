@@ -6,7 +6,7 @@ import {
   POST_DELETE_REQUEST,
   USER_LOADING_REQUEST,
 } from "../../redux/types";
-import { Button, Row, Col } from "reactstrap";
+import { Button, Row, Col, Container } from "reactstrap";
 import { Link } from "react-router-dom";
 import CKEditor from "@ckeditor/ckeditor5-react";
 import { GrowingSpinner } from "../../components/spinner/Spinner";
@@ -19,6 +19,7 @@ import {
 import BallonEditor from "@ckeditor/ckeditor5-editor-balloon/src/ballooneditor";
 import BalloonEditor from "@ckeditor/ckeditor5-editor-balloon/src/ballooneditor";
 import { editorConfiguration } from "../../components/editor/EditorConfig";
+import Comments from "../../components/comments/Comments";
 
 const PostDetail = (req) => {
   const dispatch = useDispatch();
@@ -26,6 +27,8 @@ const PostDetail = (req) => {
     (state) => state.post
   );
   const { userId, userName } = useSelector((state) => state.auth);
+  const { comments } = useSelector((state) => state.comment);
+
   console.log(req);
   useEffect(() => {
     dispatch({
@@ -129,6 +132,41 @@ const PostDetail = (req) => {
               disabled="true"
             />
           </Row>
+          <Row>
+            <Container className="mb-3 border border-blue rounded">
+              {Array.isArray(comments)
+                ? comments.map(
+                    ({ contents, creator, date, _id, creatorName }) => (
+                      <div key={_id}>
+                        <Row className="justify-content-between p-2">
+                          <div className="font-weight-bold">
+                            {creatorName ? creatorName : creator}
+                          </div>
+                          <div className="text-small">
+                            <span className="font-weight-bold">
+                              {date.split(" ")[0]}
+                            </span>
+                            <span className="font-weight-light">
+                              {" "}
+                              {date.split(" ")[1]}
+                            </span>
+                          </div>
+                        </Row>
+                        <Row className="p-2">
+                          <div>{contents}</div>
+                        </Row>
+                        <hr />
+                      </div>
+                    )
+                  )
+                : "Creator"}
+              <Comments
+                id={req.match.params.id}
+                userId={userId}
+                userName={userName}
+              />
+            </Container>
+          </Row>
         </Fragment>
       ) : (
         <h1>hi</h1>
@@ -136,6 +174,7 @@ const PostDetail = (req) => {
     </>
   );
 
+  console.log(comments, "Comments");
   return (
     <div>
       <Helmet title={`Post | ${title}`} />

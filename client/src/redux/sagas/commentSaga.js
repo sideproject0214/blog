@@ -6,6 +6,7 @@ import {
   COMMENT_LOADING_REQUEST,
   COMMENT_UPLOADING_SUCCESS,
   COMMENT_UPLOADING_REQUEST,
+  COMMENT_UPLOADING_FAILURE,
 } from "../types";
 import { push } from "connected-react-router";
 
@@ -42,11 +43,12 @@ function* watchLoadComments() {
 
 const uploadCommentsAPI = (payload) => {
   console.log(payload.id, "loadCommentAPI ID");
-  return axios.post(`/api/post/${payload.id}/comments`);
+  return axios.post(`/api/post/${payload.id}/comments`, payload);
 };
 
 function* uploadComments(action) {
   try {
+    console.log(action);
     const result = yield call(uploadCommentsAPI, action.payload);
     console.log(result, "UploadComment");
     yield put({
@@ -56,7 +58,7 @@ function* uploadComments(action) {
   } catch (e) {
     console.log(e);
     yield put({
-      type: COMMENT_LOADING_FAILURE,
+      type: COMMENT_UPLOADING_FAILURE,
       payload: e,
     });
     yield push("/");
