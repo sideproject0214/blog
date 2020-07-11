@@ -210,4 +210,41 @@ router.delete("/:id", auth, async (req, res) => {
   return res.json({ success: true });
 });
 
+// @route    GET api/post/:id/edit
+// @desc     Edit Post
+// @access   Private
+router.get("/:id/edit", auth, async (req, res, next) => {
+  try {
+    const post = await Post.findById(req.params.id).populate("creator", "name");
+    res.json(post);
+  } catch (e) {
+    console.error(e);
+  }
+});
+
+router.post("/:id/edit", auth, async (req, res, next) => {
+  console.log(req, "api/post/:id/edit");
+  const {
+    body: { title, contents, fileUrl, id },
+  } = req;
+
+  try {
+    const modified_post = await Post.findByIdAndUpdate(
+      id,
+      {
+        title,
+        contents,
+        fileUrl,
+        date: moment().format("YYYY-MM-DD hh:mm:ss"),
+      },
+      { new: true }
+    );
+    console.log(modified_post, "edit modified");
+    res.redirect(`/api/posts/${modified_post.id}`);
+  } catch (e) {
+    console.log(e);
+    next(e);
+  }
+});
+
 export default router;
