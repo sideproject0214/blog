@@ -17,6 +17,9 @@ import {
   CATEGORY_FIND_REQUEST,
   CATEGORY_FIND_SUCCESS,
   CATEGORY_FIND_FAILURE,
+  SEARCH_REQUEST,
+  SEARCH_SUCCESS,
+  SEARCH_FAILURE,
 } from "../types";
 
 const initialState = {
@@ -144,6 +147,26 @@ export default function (state = initialState, action) {
       return {
         ...state,
         categoryFindResult: action.payload,
+        loading: false,
+      };
+    case SEARCH_REQUEST:
+      return {
+        ...state,
+        posts: [],
+        searchBy: action.payload,
+        loading: true,
+      };
+    case SEARCH_SUCCESS:
+      return {
+        ...state,
+        searchBy: action.payload,
+        searchResult: action.payload,
+        loading: false,
+      };
+    case SEARCH_FAILURE:
+      return {
+        ...state,
+        searchResult: action.payload,
         loading: false,
       };
     default:
