@@ -55,8 +55,10 @@ router.post("/image", uploadS3.array("upload", 5), async (req, res, next) => {
 // api/post
 router.get("/", async (req, res) => {
   const postFindResult = await Post.find();
-  console.log(postFindResult, "All Post Get");
-  res.json(postFindResult);
+  const categoryFindResult = await Category.find();
+  const result = { postFindResult, categoryFindResult };
+
+  res.json(result);
 });
 
 // @route    POST api/post
@@ -240,7 +242,26 @@ router.post("/:id/edit", auth, async (req, res, next) => {
       { new: true }
     );
     console.log(modified_post, "edit modified");
-    res.redirect(`/api/posts/${modified_post.id}`);
+    res.redirect(`/api/post/${modified_post.id}`);
+  } catch (e) {
+    console.log(e);
+    next(e);
+  }
+});
+
+router.get("/category/:categoryName", async (req, res, next) => {
+  try {
+    const result = await Category.findOne(
+      {
+        categoryName: {
+          $regex: req.params.categoryName,
+          $options: "i",
+        },
+      },
+      "posts"
+    ).populate({ path: "posts" });
+    console.log(result, "Category Find result");
+    res.send(result);
   } catch (e) {
     console.log(e);
     next(e);

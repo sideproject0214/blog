@@ -20,6 +20,9 @@ import {
   POST_EDIT_UPLOADING_FAILURE,
   POST_EDIT_UPLOADING_REQUEST,
   POST_EDIT_LOADING_REQUEST,
+  CATEGORY_FIND_FAILURE,
+  CATEGORY_FIND_SUCCESS,
+  CATEGORY_FIND_REQUEST,
 } from "../types";
 
 // All Posts load
@@ -200,7 +203,7 @@ const PostEditUploadAPI = (payload) => {
     config.headers["x-auth-token"] = token;
   }
 
-  return axios.post(`/api/post/${payload.id}/edit`, config, payload);
+  return axios.post(`/api/post/${payload.id}/edit`, payload, config);
 };
 
 function* PostEditUpload(action) {
@@ -210,17 +213,41 @@ function* PostEditUpload(action) {
       type: POST_EDIT_UPLOADING_SUCCESS,
       payload: result.data,
     });
+    yield put(push(`/post/${result.data._id}`));
   } catch (e) {
     yield put({
       type: POST_EDIT_UPLOADING_FAILURE,
       payload: e,
     });
-    yield put(push("/"));
   }
 }
 
 function* watchPostEditUpload() {
   yield takeEvery(POST_EDIT_UPLOADING_REQUEST, PostEditUpload);
+}
+
+// Category Find
+const CategoryFindAPI = (payload) => {
+  return axios.get(`/api/post/category/${encodeURIComponent(payload)}`);
+};
+
+function* CategoryFind(action) {
+  try {
+    const result = yield call(CategoryFindAPI, action.payload);
+    yield put({
+      type: CATEGORY_FIND_SUCCESS,
+      payload: result.data,
+    });
+  } catch (e) {
+    yield put({
+      type: CATEGORY_FIND_FAILURE,
+      payload: e,
+    });
+  }
+}
+
+function* watchCategoryFind() {
+  yield takeEvery(CATEGORY_FIND_REQUEST, CategoryFind);
 }
 
 export default function* postSaga() {
@@ -231,5 +258,6 @@ export default function* postSaga() {
     fork(watchDeletePost),
     fork(watchPostEditLoad),
     fork(watchPostEditUpload),
+    fork(watchCategoryFind),
   ]);
 }
