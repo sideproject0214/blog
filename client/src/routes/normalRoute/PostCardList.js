@@ -26,31 +26,34 @@ const PostCardList = () => {
 
   const observer = useRef();
 
-  const lastPostElementRef = useCallback((node) => {
-    if (loading) return;
+  const lastPostElementRef = useCallback(
+    (node) => {
+      if (loading) return;
 
-    observer.current = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
-        let remainPostCount = postCountRef.current - skipNumberRef.current;
-        if (remainPostCount >= 0) {
-          dispatch({
-            type: POSTS_LOADING_REQUEST,
-            payload: skipNumberRef.current + 6,
-          });
-          skipNumberRef.current += 6;
-        } else {
-          endMsg.current = true;
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          let remainPostCount = postCountRef.current - skipNumberRef.current;
+          if (remainPostCount >= 0) {
+            dispatch({
+              type: POSTS_LOADING_REQUEST,
+              payload: skipNumberRef.current + 6,
+            });
+            skipNumberRef.current += 6;
+          } else {
+            endMsg.current = true;
+          }
         }
+      });
+
+      if (observer.current) observer.current.disconnect();
+
+      if (node) {
+        console.log(node);
+        observer.current.observe(node);
       }
-    });
-
-    if (observer.current) observer.current.disconnect();
-
-    if (node) {
-      console.log(node);
-      observer.current.observe(node);
-    }
-  });
+    },
+    [dispatch, loading]
+  );
 
   ////////////////////////////
 
