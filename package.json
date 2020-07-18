@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon ./server/server.js --exec babel-node --ignore './client'"
+    "dev": "nodemon ./server/server.js --exec babel-node --ignore './client'",
+    "prebuild": "cd client && npm run build",
+    "build": "babel server --out-dir build",
+    "build:server": "babel server --out-dir build"
   },
   "author": "",
   "license": "ISC",

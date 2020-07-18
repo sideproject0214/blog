@@ -48,6 +48,7 @@
     "babel-jest": "^24.9.0",
     "babel-loader": "8.1.0",
     "babel-plugin-named-asset-import": "^0.3.6",
+    "babel-plugin-transform-remove-console": "6.9.4",
     "babel-preset-react-app": "^9.1.2",
     "bootstrap": "4.5.0",
     "camelcase": "^5.3.1",
@@ -114,6 +115,7 @@
   "eslintConfig": {
     "extends": "react-app"
   },
+  "proxy": "http://localhost:8080",
   "browserslist": {
     "production": [
       ">0.2%",
