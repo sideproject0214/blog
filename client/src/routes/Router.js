@@ -10,7 +10,11 @@ import PostDetail from "./normalRoute/PostDetail";
 import Search from "./normalRoute/Search";
 import PostEdit from "./normalRoute/PostEdit";
 import CategoryResult from "./normalRoute/CategoryResult";
-import { EditProtectedRoute } from "./protectedRoute/ProtectedRoute";
+import Profile from "./normalRoute/Profile";
+import {
+  EditProtectedRoute,
+  ProfileProtectedRoute,
+} from "./protectedRoute/ProtectedRoute";
 
 const MyRouter = () => (
   <Fragment>
@@ -28,6 +32,11 @@ const MyRouter = () => (
           component={CategoryResult}
         />
         <Route path="/search/:searchTerm" exact component={Search} />
+        <ProfileProtectedRoute
+          path="/user/:userName/profile"
+          exact
+          component={Profile}
+        />
         <Redirect from="*" to="/" />
       </Switch>
     </Container>
