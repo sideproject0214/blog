@@ -86,7 +86,7 @@ router.post("/", auth, uploadS3.none(), async (req, res, next) => {
       contents,
       fileUrl,
       creator: req.user.id,
-      data: moment().format("YYYY-MM-DD hh:mm:ss"),
+      date: moment().format("YYYY-MM-DD hh:mm:ss"),
     });
 
     const findResult = await Category.findOne({
