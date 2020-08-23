@@ -1,0 +1,27 @@
+{
+  "defaults": {
+    "store": {
+      "module": "greenlock-store-fs"
+    },
+    "challenges": {
+      "http-01": {
+        "module": "acme-http-01-standalone"
+      }
+    },
+    "renewOffset": "-45d",
+    "renewStagger": "3d",
+    "accountKeyType": "EC-P256",
+    "serverKeyType": "RSA-2048",
+    "subscriberEmail": "sideproject0214@gmail.com"
+  },
+  "sites": [
+    {
+      "subject": "ssaple.com",
+      "altnames": [
+        "ssaple.com",
+        "www.ssaple.com"
+      ],
+      "renewAt": 1
+    }
+  ]
+}

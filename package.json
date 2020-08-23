@@ -18,6 +18,7 @@
     "cors": "2.8.5",
     "dotenv": "8.2.0",
     "express": "4.17.1",
+    "greenlock-express": "4.0.3",
     "helmet": "3.22.0",
     "hpp": "0.2.3",
     "jsonwebtoken": "8.5.1",
