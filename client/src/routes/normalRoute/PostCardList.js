@@ -1,4 +1,4 @@
-import React, { useEffect, Fragment, useRef, useCallback } from "react";
+import React, { Fragment, useRef, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { POSTS_LOADING_REQUEST } from "../../redux/types";
 import { Helmet } from "react-helmet";
@@ -11,27 +11,30 @@ const PostCardList = () => {
   const { posts, categoryFindResult, loading, postCount } = useSelector(
     (state) => state.post
   );
+
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch({ type: POSTS_LOADING_REQUEST, payload: 0 });
   }, [dispatch]);
 
-  ////////////////////////////
+  ////////////////////////////////////////
   const skipNumberRef = useRef(0);
   const postCountRef = useRef(0);
   const endMsg = useRef(false);
 
   postCountRef.current = postCount - 6;
 
-  const observer = useRef();
+  const useOnScreen = (options) => {
+    const lastPostElementRef = useRef();
 
-  const lastPostElementRef = useCallback(
-    (node) => {
-      if (loading) return;
+    const [visible, setVisible] = useState(false);
 
-      observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting) {
+    useEffect(() => {
+      const observer = new IntersectionObserver(([entry]) => {
+        setVisible(entry.isIntersecting);
+
+        if (entry.isIntersecting) {
           let remainPostCount = postCountRef.current - skipNumberRef.current;
           if (remainPostCount >= 0) {
             dispatch({
@@ -41,31 +44,44 @@ const PostCardList = () => {
             skipNumberRef.current += 6;
           } else {
             endMsg.current = true;
+            console.log(endMsg.current);
           }
         }
-      });
+      }, options);
 
-      if (observer.current) observer.current.disconnect();
-
-      if (node) {
-        console.log(node);
-        observer.current.observe(node);
+      if (lastPostElementRef.current) {
+        observer.observe(lastPostElementRef.current);
       }
-    },
-    [dispatch, loading]
-  );
 
-  ////////////////////////////
+      const LastElementReturnFunc = () => {
+        if (lastPostElementRef.current) {
+          observer.unobserve(lastPostElementRef.current);
+        }
+      };
+
+      return LastElementReturnFunc;
+    }, [lastPostElementRef, options]);
+
+    return [lastPostElementRef, visible];
+  };
+
+  ////////////////////////////////////////
+  const [lastPostElementRef, visible] = useOnScreen({
+    threshold: "0.5",
+  });
+  console.log(visible, "visible", skipNumberRef.current, "skipNum");
 
   return (
     <Fragment>
       <Helmet title="Home" />
-      <Row className="border-bottom border-top border-primary py-2 mb-3">
+
+      <Row className="border-bottom border-top border-primary py-2 mb-3 ">
         <Category posts={categoryFindResult} />
       </Row>
 
       <Row>{posts ? <PostCardOne posts={posts} /> : GrowingSpinner}</Row>
-      <div ref={lastPostElementRef}> {loading && GrowingSpinner} </div>
+
+      <div ref={lastPostElementRef}>{loading && GrowingSpinner}</div>
       {loading ? (
         ""
       ) : endMsg ? (
